@@ -83,7 +83,7 @@ void	monitor(t_state *state)
 		i = 0;
 		while (i < state->number_of_philosophers)
 		{
-			if (state->times_must_eat != -1 && state->philosophers[i].meal_count >= state->times_must_eat + 1)
+			if (state->times_must_eat != -1 && state->philosophers[i].meal_count > state->times_must_eat + 1)
 			{
 				free(state->philosophers);
 				free(state->forks);
