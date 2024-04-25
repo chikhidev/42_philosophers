@@ -26,6 +26,10 @@ int	is_overflowed_num(char *expected, int actual)
 	return (0);
 }
 
+/**
+ * number_of_philosophers 	time_to_die 	time_to_eat 	time_to_sleep 	[number_of_times_each_philosopher_must_ea
+*/
+
 void	validate_input(t_state *state, int ac, char **av)
 {
 	int		dig;

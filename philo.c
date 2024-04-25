@@ -37,6 +37,7 @@ int main(int ac, char **av)
 		state.philosophers[i].id = i;
 		state.philosophers[i].last_meal = get_time();
 		state.philosophers[i].meal_count = 0;
+		state.philosophers[i].slept = 0;
 		state.philosophers[i].state = &state;
 		state.philosophers[i].status = THINKING;
 		state.philosophers[i].l_fork = &state.forks[i];
@@ -92,7 +93,7 @@ void	monitor(t_state *state)
 			if (get_time() - state->philosophers[i].last_meal > state->time_to_die)
 			{
 				state->philosophers[i].status = DEAD;
-				printf("%d %d %s\n", get_time() - state->start_time, state->philosophers[i].id, state->philosophers[i].status);
+				printf(RED"%d\t%d %s\n", get_time() - state->start_time, state->philosophers[i].id, state->philosophers[i].status);
 				free(state->philosophers);
 				free(state->forks);
 				exit(1);
