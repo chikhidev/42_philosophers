@@ -2,6 +2,7 @@
 
 void	error(t_state *state);
 int		get_time();
+void	destroy_threads(t_state *state);
 void	monitor(t_state *state);
 
 int main(int ac, char **av)
@@ -39,7 +40,7 @@ int main(int ac, char **av)
 		state.philosophers[i].meal_count = 0;
 		state.philosophers[i].slept = 0;
 		state.philosophers[i].state = &state;
-		state.philosophers[i].status = THINKING;
+		state.philosophers[i].status = HUNGRY;
 		state.philosophers[i].l_fork = &state.forks[i];
 		state.philosophers[i].r_fork = &state.forks[(i + 1) % state.number_of_philosophers];
 		pthread_create(&state.philosophers[i].thread, NULL, routine, &state.philosophers[i]);
@@ -54,13 +55,8 @@ int main(int ac, char **av)
 		pthread_join(state.philosophers[i].thread, NULL);
 		i++;
 	}
-
-	i = 0;
-	while (i < state.number_of_philosophers)
-	{
-		pthread_mutex_destroy(&state.forks[i]);
-		i++;
-	}
+	
+	destroy_threads(&state);
 
 	free(state.philosophers);
 	free(state.forks);
@@ -73,6 +69,18 @@ void	error(t_state *state)
 	free(state->forks);
 	write(2, "Error\n", 6);
 	exit(1);
+}
+
+void	destroy_threads(t_state *state)
+{
+	int	i;
+
+	i = 0;
+	while (i < state->number_of_philosophers)
+	{
+		pthread_join(state->philosophers[i].thread, NULL);
+		i++;
+	}
 }
 
 void	monitor(t_state *state)
@@ -90,10 +98,10 @@ void	monitor(t_state *state)
 				free(state->forks);
 				exit(0);
 			}
-			if (get_time() - state->philosophers[i].last_meal > state->time_to_die)
+			if (get_time() - state->philosophers[i].last_meal >= state->time_to_die)
 			{
-				state->philosophers[i].status = DEAD;
-				printf(RED"%d\t%d %s\n", get_time() - state->start_time, state->philosophers[i].id, state->philosophers[i].status);
+				printf("%d\t%d %s\n", get_time() - state->start_time, state->philosophers[i].id + 1, DEAD);
+				destroy_threads(state);
 				free(state->philosophers);
 				free(state->forks);
 				exit(1);
