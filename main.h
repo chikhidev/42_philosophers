@@ -6,7 +6,7 @@
 /*   By: abchikhi <abchikhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 10:01:14 by abchikhi          #+#    #+#             */
-/*   Updated: 2024/04/28 20:20:28 by abchikhi         ###   ########.fr       */
+/*   Updated: 2024/04/28 20:38:03 by abchikhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ typedef struct s_philo
     pthread_t       thread;
     int             id;
     int             times_ate;
+    pthread_mutex_t *r_fork;
+    pthread_mutex_t *l_fork;
     struct s_app    *app;
 }   t_philo;
 
@@ -61,6 +63,7 @@ size_t	ft_strlen(const char *str);
 
 /*config.c*/
 int     init_data(t_app *app);
+void	print_status(t_philo *philo, char *status);
 
 /*routine.c*/
 void    *routine(void *_philo_);

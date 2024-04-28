@@ -6,7 +6,7 @@
 /*   By: abchikhi <abchikhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 10:01:09 by abchikhi          #+#    #+#             */
-/*   Updated: 2024/04/28 20:21:28 by abchikhi         ###   ########.fr       */
+/*   Updated: 2024/04/28 20:35:20 by abchikhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,18 @@ int validate_args(t_app *app, int ac, char **av)
         return !(is_overflowed_num(av[5], app->times_to_eat) || app->times_to_eat <= 0);
     }
     return 1;
+}
+
+void	join_threads(t_app *app)
+{
+	int	i;
+
+	i = 0;
+	while (i < app->philos_num)
+	{
+		pthread_join(app->philos[i].thread, NULL);
+		i++;
+	}
 }
 
 int main(int ac, char **av)

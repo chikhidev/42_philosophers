@@ -19,6 +19,30 @@ int	allocate(t_app *app)
 	return 1;
 }
 
+void	get_forks(t_app *app, t_philo *philo, int i)
+{
+	//i do have a problem in the logic of taking the forks
+
+	// if (philo->id % 2)
+	// {
+	// 	philo->l_fork = &app->forks[i];
+	// 	if (i + 1 < app->philos_num)
+	// 		philo->r_fork = &app->forks[i + 1];
+	// 	else
+	// 		philo->r_fork = &app->forks[0];
+	// 	printf("forks of %d are [%d, %d]\n", philo->id,
+	// 		i, i + 1 < app->philos_num ? i + 1 : 0);
+	// 	return ;
+	// }
+	// if (i + 1 < app->philos_num - 1)
+	// 	philo->l_fork = &app->forks[i + 1];
+	// else
+	// 	philo->l_fork = &app->forks[0];
+	// philo->r_fork = &app->forks[i];	
+	// printf("forks of %d are [%d, %d]\n", philo->id,
+	// 		i < app->philos_num ? i + 1 : 0, i);
+}
+
 int	init_data(t_app *app)
 {
 	int	i;
@@ -32,6 +56,7 @@ int	init_data(t_app *app)
 		app->philos[i].id = i;
 		app->philos[i].app = app;
 		pthread_mutex_init(&app->forks[i], NULL);
+		get_forks(app, &app->philos[i], i);
 	}
 	pthread_mutex_init(&app->print_lock, NULL);
 	app->start_time = get_time();
@@ -40,18 +65,6 @@ int	init_data(t_app *app)
 		pthread_create(&app->philos[i].thread, NULL, routine, &app->philos[i]);
 	return 1;
 }	
-
-void	join_threads(t_app *app)
-{
-	int	i;
-
-	i = 0;
-	while (i < app->philos_num)
-	{
-		pthread_join(app->philos[i].thread, NULL);
-		i++;
-	}
-}
 
 void	print_status(t_philo *philo, char *status)
 {
