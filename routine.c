@@ -8,3 +8,8 @@ void *routine(void *_philo_)
     printf("[DEBUG]: inside the thread of %d\n", philo->id);
     return NULL;
 }
+
+// int eat(t_philo *philo)
+// {
+
+// }

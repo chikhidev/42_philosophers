@@ -6,7 +6,7 @@
 /*   By: abchikhi <abchikhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 10:01:09 by abchikhi          #+#    #+#             */
-/*   Updated: 2024/04/28 18:37:25 by abchikhi         ###   ########.fr       */
+/*   Updated: 2024/04/28 20:21:28 by abchikhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int init(t_app **app)
     if (!*app)
         return 0;
     (*app)->philos = NULL;
+    (*app)->forks = NULL;
     (*app)->deads = 0;
     return 1;
 }
@@ -84,5 +85,6 @@ int main(int ac, char **av)
     if (!init_data(app))
         return free_everything(app);
     join_threads(app);
+    free_everything(app);
     return(0);
 }

@@ -1,9 +1,10 @@
 NAME = philo
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g3 -fsanitize=address
 
 SRC = 	main.c	\
 		config.c	\
-		routine.c
+		routine.c	\
+		time.c
 
 SRC += 	utils/ft_atoi.c  \
 		utils/ft_itoa.c  \
