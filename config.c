@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   config.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abchikhi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/29 16:31:49 by abchikhi          #+#    #+#             */
+/*   Updated: 2024/04/29 16:54:22 by abchikhi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "main.h"
 
 int	free_everything(t_app *app)
@@ -21,26 +33,17 @@ int	allocate(t_app *app)
 
 void	get_forks(t_app *app, t_philo *philo, int i)
 {
-	//i do have a problem in the logic of taking the forks
-
-	// if (philo->id % 2)
-	// {
-	// 	philo->l_fork = &app->forks[i];
-	// 	if (i + 1 < app->philos_num)
-	// 		philo->r_fork = &app->forks[i + 1];
-	// 	else
-	// 		philo->r_fork = &app->forks[0];
-	// 	printf("forks of %d are [%d, %d]\n", philo->id,
-	// 		i, i + 1 < app->philos_num ? i + 1 : 0);
-	// 	return ;
-	// }
-	// if (i + 1 < app->philos_num - 1)
-	// 	philo->l_fork = &app->forks[i + 1];
-	// else
-	// 	philo->l_fork = &app->forks[0];
-	// philo->r_fork = &app->forks[i];	
-	// printf("forks of %d are [%d, %d]\n", philo->id,
-	// 		i < app->philos_num ? i + 1 : 0, i);
+	if (philo->id % 2)
+	{
+		philo->r_fork = &app->forks[i];
+		philo->l_fork = &app->forks[i - 1];
+		return ;
+	}
+	if (i == 0)
+		philo->r_fork = &app->forks[app->philos_num - 1];
+	else
+		philo->r_fork = &app->forks[i - 1];
+	philo->l_fork = &app->forks[i];
 }
 
 int	init_data(t_app *app)
@@ -50,16 +53,18 @@ int	init_data(t_app *app)
 	if (!allocate(app))
 		return 0;
 	i = -1;
+	app->start_time = get_time();
 	while (++i < app->philos_num)
 	{
 		app->philos[i].times_ate = 0;
 		app->philos[i].id = i;
 		app->philos[i].app = app;
+		app->philos[i].last_meal = app->start_time;
 		pthread_mutex_init(&app->forks[i], NULL);
 		get_forks(app, &app->philos[i], i);
 	}
 	pthread_mutex_init(&app->print_lock, NULL);
-	app->start_time = get_time();
+	pthread_mutex_init(&app->dead_lock, NULL);
 	i = -1;
 	while (++i < app->philos_num)
 		pthread_create(&app->philos[i].thread, NULL, routine, &app->philos[i]);
@@ -70,6 +75,6 @@ void	print_status(t_philo *philo, char *status)
 {
 	LOCK(&philo->app->print_lock);
 	printf("%ld\t%d %s\n", get_time() - philo->app->start_time,
-		philo->id, status);
-	LOCK(&philo->app->print_lock);
+		philo->id + 1, status);
+	UNLOCK(&philo->app->print_lock);
 }

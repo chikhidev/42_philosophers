@@ -6,7 +6,7 @@
 /*   By: abchikhi <abchikhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 10:01:14 by abchikhi          #+#    #+#             */
-/*   Updated: 2024/04/28 20:38:03 by abchikhi         ###   ########.fr       */
+/*   Updated: 2024/04/29 16:52:56 by abchikhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct s_philo
     pthread_t       thread;
     int             id;
     int             times_ate;
+    size_t	last_meal;
     pthread_mutex_t *r_fork;
     pthread_mutex_t *l_fork;
     struct s_app    *app;
@@ -49,6 +50,7 @@ typedef struct s_app
     int         	times_to_eat;
     int         	deads;
     pthread_mutex_t print_lock;
+    pthread_mutex_t dead_lock;
     t_philo         *philos;
     pthread_mutex_t	*forks;
 }   t_app;
@@ -73,5 +75,8 @@ void	join_threads(t_app *app);
 /*time.h*/
 size_t  get_time();
 void    sleep_for(int time);
+
+/*monitor.c*/
+int	monitor(t_app *app);
 
 #endif

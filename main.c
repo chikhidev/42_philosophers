@@ -6,7 +6,7 @@
 /*   By: abchikhi <abchikhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 10:01:09 by abchikhi          #+#    #+#             */
-/*   Updated: 2024/04/28 20:35:20 by abchikhi         ###   ########.fr       */
+/*   Updated: 2024/04/29 16:49:10 by abchikhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,9 @@ int main(int ac, char **av)
     if (!init(&app) || !validate_args(app, ac, av))
         return free_everything(app);
     if (!init_data(app))
-        return free_everything(app);
-    join_threads(app);
-    free_everything(app);
+	    return free_everything(app);
+   	monitor(app);
+	join_threads(app);	
+	free_everything(app);
     return(0);
 }
