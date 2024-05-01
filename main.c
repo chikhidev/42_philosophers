@@ -6,7 +6,7 @@
 /*   By: abchikhi <abchikhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 10:01:09 by abchikhi          #+#    #+#             */
-/*   Updated: 2024/04/29 16:49:10 by abchikhi         ###   ########.fr       */
+/*   Updated: 2024/05/01 11:25:03 by abchikhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,14 +90,16 @@ void	join_threads(t_app *app)
 int main(int ac, char **av)
 {
     t_app *app;
+    int     sig;
 
+    sig = 0;
     app = NULL;
     if (!init(&app) || !validate_args(app, ac, av))
         return free_everything(app);
     if (!init_data(app))
 	    return free_everything(app);
-   	monitor(app);
+   	sig = monitor(app);
 	join_threads(app);	
 	free_everything(app);
-    return(0);
+    return(sig);
 }

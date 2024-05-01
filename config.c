@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   config.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abchikhi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: abchikhi <abchikhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 16:31:49 by abchikhi          #+#    #+#             */
-/*   Updated: 2024/04/29 16:54:22 by abchikhi         ###   ########.fr       */
+/*   Updated: 2024/05/01 11:01:34 by abchikhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	init_data(t_app *app)
 		app->philos[i].times_ate = 0;
 		app->philos[i].id = i;
 		app->philos[i].app = app;
-		app->philos[i].last_meal = app->start_time;
+		app->philos[i].last_meal = get_time();
 		pthread_mutex_init(&app->forks[i], NULL);
 		get_forks(app, &app->philos[i], i);
 	}

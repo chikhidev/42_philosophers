@@ -5,11 +5,11 @@
       "name": "C/C++ Runner: Debug Session",
       "type": "cppdbg",
       "request": "launch",
-      "args": ["1", "1", "1", "1"],
+      "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
       "cwd": "/nfs/homes/abchikhi/philo2",
-      "program": "/nfs/homes/abchikhi/philo2/philo",
+      "program": "/nfs/homes/abchikhi/philo2/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
