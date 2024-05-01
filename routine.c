@@ -6,7 +6,7 @@
 /*   By: abchikhi <abchikhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 16:38:05 by abchikhi          #+#    #+#             */
-/*   Updated: 2024/05/01 11:26:18 by abchikhi         ###   ########.fr       */
+/*   Updated: 2024/05/01 11:33:47 by abchikhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,14 @@ int	someone_died(t_philo *philo);
 void *routine(void *_philo_)
 {
     t_philo *philo;
-    int     fun_res;;
+    int     fun_res;
 
     fun_res = 1;
     philo = (t_philo *)_philo_;
     while (1)
     {
+        if (philo->app->times_to_eat != -1 && philo->times_ate >= philo->app->times_to_eat)
+            return NULL;
         fun_res = eat(philo);
         if (fun_res == -2)
             return NULL;
