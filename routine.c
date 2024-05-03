@@ -6,7 +6,7 @@
 /*   By: abchikhi <abchikhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 16:38:05 by abchikhi          #+#    #+#             */
-/*   Updated: 2024/05/01 11:33:47 by abchikhi         ###   ########.fr       */
+/*   Updated: 2024/05/03 10:53:12 by abchikhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,15 @@ void *routine(void *_philo_)
     philo = (t_philo *)_philo_;
     while (1)
     {
-        if (philo->app->times_to_eat != -1 && philo->times_ate >= philo->app->times_to_eat)
+        LOCK(&philo->app->dead_lock);
+        if (philo->app->times_to_eat != -1
+            && philo->times_ate >= philo->app->times_to_eat)
+        {
+            philo->app->finished++;
             return NULL;
+        }
+        UNLOCK(&philo->app->dead_lock);
+
         fun_res = eat(philo);
         if (fun_res == -2)
             return NULL;
@@ -55,7 +62,7 @@ int eat(t_philo *philo)
         return -2;
     LOCK(philo->r_fork);
     print_status(philo, TOOK_FORK);
-    if (someone_died(philo))
+    if (someone_died(philo) || philo->app->philos_num == 1)
         return -1;
     LOCK(philo->l_fork);
     print_status(philo, TOOK_FORK);
@@ -63,6 +70,10 @@ int eat(t_philo *philo)
 	    return 0;
     print_status(philo, EATING);
     sleep_for(philo->app->time_of_eating);
+    LOCK(&philo->app->dead_lock);
+    philo->times_ate++;
+    philo->last_meal = get_time();
+    UNLOCK(&philo->app->dead_lock);
     return 1;
 }
 

@@ -2,14 +2,7 @@
 
 void	sleep_for(int time)
 {
-	int	seconds;
-
-	seconds = 0;
-	while (seconds < time)
-	{
-		usleep(1000);
-		seconds++;
-	}
+	usleep(time * 1000);
 }
 
 size_t	get_time()

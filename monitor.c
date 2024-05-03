@@ -6,7 +6,7 @@
 /*   By: abchikhi <abchikhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 16:47:30 by abchikhi          #+#    #+#             */
-/*   Updated: 2024/05/01 11:10:16 by abchikhi         ###   ########.fr       */
+/*   Updated: 2024/05/03 10:33:15 by abchikhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,12 @@ int	monitor(t_app *app)
 		while (++i < app->philos_num)
 		{
 			LOCK(&app->dead_lock);
+			if (app->times_to_eat != -1
+            	&& app->finished == app->philos_num)
+			{
+				UNLOCK(&app->dead_lock);
+				return 1;
+			}
 			if (get_time() - app->philos[i].last_meal > (size_t)app->time_to_die)
 			{
 				app->deads++;

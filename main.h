@@ -6,7 +6,7 @@
 /*   By: abchikhi <abchikhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 10:01:14 by abchikhi          #+#    #+#             */
-/*   Updated: 2024/04/29 16:52:56 by abchikhi         ###   ########.fr       */
+/*   Updated: 2024/05/02 16:35:31 by abchikhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,10 @@ typedef struct s_app
     int         	time_of_sleeping;
     int         	times_to_eat;
     int         	deads;
+    int             finished;
     pthread_mutex_t print_lock;
     pthread_mutex_t dead_lock;
+    pthread_mutex_t time_lock;
     t_philo         *philos;
     pthread_mutex_t	*forks;
 }   t_app;
