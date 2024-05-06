@@ -6,7 +6,7 @@
 /*   By: abchikhi <abchikhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 16:38:05 by abchikhi          #+#    #+#             */
-/*   Updated: 2024/05/03 10:53:12 by abchikhi         ###   ########.fr       */
+/*   Updated: 2024/05/06 14:09:36 by abchikhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int eat(t_philo *philo);
 int	sleep_(t_philo *philo);
 int	someone_died(t_philo *philo);
+int think(t_philo *philo);
 
 void *routine(void *_philo_)
 {
@@ -25,15 +26,6 @@ void *routine(void *_philo_)
     philo = (t_philo *)_philo_;
     while (1)
     {
-        LOCK(&philo->app->dead_lock);
-        if (philo->app->times_to_eat != -1
-            && philo->times_ate >= philo->app->times_to_eat)
-        {
-            philo->app->finished++;
-            return NULL;
-        }
-        UNLOCK(&philo->app->dead_lock);
-
         fun_res = eat(philo);
         if (fun_res == -2)
             return NULL;
@@ -48,10 +40,25 @@ void *routine(void *_philo_)
             UNLOCK(philo->l_fork);
             return NULL; 
         }
+        
         UNLOCK(philo->r_fork);
         UNLOCK(philo->l_fork);
+        
         if (!sleep_(philo))
             return NULL;
+        if (!think(philo))
+            return NULL;
+
+        LOCK(&philo->app->dead_lock);
+        if (philo->app->times_to_eat != -1
+            && philo->times_ate >= philo->app->times_to_eat)
+        {
+            philo->finished = 1;
+            philo->app->finished++;
+            UNLOCK(&philo->app->dead_lock);
+            return NULL;
+        }
+        UNLOCK(&philo->app->dead_lock);
     }
     return NULL;
 }
@@ -60,20 +67,28 @@ int eat(t_philo *philo)
 {
     if (someone_died(philo))
         return -2;
+
+    //locking right fork
     LOCK(philo->r_fork);
-    print_status(philo, TOOK_FORK);
     if (someone_died(philo) || philo->app->philos_num == 1)
         return -1;
-    LOCK(philo->l_fork);
     print_status(philo, TOOK_FORK);
+        
+    //locking left fork
+    LOCK(philo->l_fork);
     if (someone_died(philo))
 	    return 0;
+    print_status(philo, TOOK_FORK);
+    
+    //modify the data
     print_status(philo, EATING);
-    sleep_for(philo->app->time_of_eating);
     LOCK(&philo->app->dead_lock);
-    philo->times_ate++;
     philo->last_meal = get_time();
+    philo->times_ate++;
     UNLOCK(&philo->app->dead_lock);
+
+    usleep(philo->app->time_of_eating * 1000);
+    
     return 1;
 }
 
@@ -82,7 +97,7 @@ int	sleep_(t_philo *philo)
 	if (someone_died(philo))
 		return 0;	
 	print_status(philo, SLEEPING);
-	sleep_for(philo->app->time_of_eating);
+	usleep(philo->app->time_of_sleeping * 1000);
 	return 1;
 }
 
@@ -96,4 +111,12 @@ int	someone_died(t_philo *philo)
 	}
 	UNLOCK(&philo->app->dead_lock);
 	return 0;
+}
+
+int think(t_philo *philo)
+{
+    if (someone_died(philo))
+		return 0;
+    print_status(philo, THINKING);
+    return 1;
 }

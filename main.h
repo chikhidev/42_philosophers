@@ -6,7 +6,7 @@
 /*   By: abchikhi <abchikhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 10:01:14 by abchikhi          #+#    #+#             */
-/*   Updated: 2024/05/02 16:35:31 by abchikhi         ###   ########.fr       */
+/*   Updated: 2024/05/06 13:58:59 by abchikhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_philo
 {
     pthread_t       thread;
     int             id;
+    int             finished;
     int             times_ate;
     size_t	last_meal;
     pthread_mutex_t *r_fork;

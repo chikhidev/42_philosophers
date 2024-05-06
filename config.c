@@ -6,7 +6,7 @@
 /*   By: abchikhi <abchikhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 16:31:49 by abchikhi          #+#    #+#             */
-/*   Updated: 2024/05/03 10:53:41 by abchikhi         ###   ########.fr       */
+/*   Updated: 2024/05/06 13:58:42 by abchikhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,12 @@ int	allocate(t_app *app)
 
 void	get_forks(t_app *app, t_philo *philo, int i)
 {
-	if (i == 0)
-		philo->r_fork = &app->forks[app->philos_num - 1];
-	else
-		philo->r_fork = &app->forks[i - 1];
-	philo->l_fork = &app->forks[i];
-	if (philo->id % 2)
+	philo->r_fork = &app->forks[i];
+	philo->l_fork = &app->forks[(i + 1) % app->philos_num];
+	if (i % 2)
 	{
-		philo->r_fork = &app->forks[i];
-		philo->l_fork = &app->forks[i - 1];
-		return ;
+		philo->l_fork = &app->forks[i];
+		philo->r_fork = &app->forks[(i + 1) % app->philos_num];
 	}
 }
 
@@ -58,6 +54,7 @@ int	init_data(t_app *app)
 	while (++i < app->philos_num)
 	{
 		app->philos[i].times_ate = 0;
+		app->philos[i].finished = 0;
 		app->philos[i].id = i;
 		app->philos[i].app = app;
 		app->philos[i].last_meal = get_time();
