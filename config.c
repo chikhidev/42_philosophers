@@ -6,7 +6,7 @@
 /*   By: abchikhi <abchikhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 16:31:49 by abchikhi          #+#    #+#             */
-/*   Updated: 2024/05/06 13:58:42 by abchikhi         ###   ########.fr       */
+/*   Updated: 2024/05/07 13:45:33 by abchikhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,14 @@ int	allocate(t_app *app)
 
 void	get_forks(t_app *app, t_philo *philo, int i)
 {
-	philo->r_fork = &app->forks[i];
-	philo->l_fork = &app->forks[(i + 1) % app->philos_num];
 	if (i % 2)
 	{
-		philo->l_fork = &app->forks[i];
 		philo->r_fork = &app->forks[(i + 1) % app->philos_num];
+		philo->l_fork = &app->forks[i];
+		return ;
 	}
+	philo->r_fork = &app->forks[i];
+	philo->l_fork = &app->forks[(i + 1) % app->philos_num];
 }
 
 int	init_data(t_app *app)
@@ -63,7 +64,7 @@ int	init_data(t_app *app)
 	}
 	pthread_mutex_init(&app->print_lock, NULL);
 	pthread_mutex_init(&app->dead_lock, NULL);
-	pthread_mutex_init(&app->time_lock, NULL);
+	// pthread_mutex_init(&app->time_lock, NULL);
 	i = -1;
 	while (++i < app->philos_num)
 		pthread_create(&app->philos[i].thread, NULL, routine, &app->philos[i]);

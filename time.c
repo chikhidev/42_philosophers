@@ -2,7 +2,15 @@
 
 void	sleep_for(int time)
 {
-	usleep(time * 1000);
+    size_t  expected;
+
+    expected = get_time() + time;
+
+    while (1)
+    {
+        if (get_time() >= expected)
+            return ;
+    }
 }
 
 size_t	get_time()
