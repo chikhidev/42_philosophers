@@ -6,7 +6,7 @@
 /*   By: abchikhi <abchikhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 16:38:05 by abchikhi          #+#    #+#             */
-/*   Updated: 2024/05/07 13:46:47 by abchikhi         ###   ########.fr       */
+/*   Updated: 2024/05/07 13:56:31 by abchikhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,14 @@ int eat(t_philo *philo)
 
     //locking right fork
     LOCK(philo->r_fork);
-    if (someone_died(philo) || philo->app->philos_num == 1)
+    if (someone_died(philo))
         return -1;
     print_status(philo, TOOK_FORK);
-        
+
+    if (philo->app->philos_num == 1)
+	    return -1;
+    
+
     //locking left fork
     LOCK(philo->l_fork);
     if (someone_died(philo))
