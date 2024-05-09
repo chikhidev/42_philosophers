@@ -6,7 +6,7 @@
 /*   By: abchikhi <abchikhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 10:01:09 by abchikhi          #+#    #+#             */
-/*   Updated: 2024/05/08 22:41:14 by abchikhi         ###   ########.fr       */
+/*   Updated: 2024/05/09 09:08:31 by abchikhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ int main(int ac, char **av)
     if (!init_data(app))
 	    return free_everything(app);
    	sig = monitor(app);
-    printf("------finished the main thread--------\n");
 	join_threads(app);
 	free_everything(app);
     return(sig);
