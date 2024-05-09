@@ -6,7 +6,7 @@
 /*   By: abchikhi <abchikhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 16:38:05 by abchikhi          #+#    #+#             */
-/*   Updated: 2024/05/07 13:56:31 by abchikhi         ###   ########.fr       */
+/*   Updated: 2024/05/09 08:55:01 by abchikhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void *routine(void *_philo_)
 
     fun_res = 1;
     philo = (t_philo *)_philo_;
+    
     while (1)
     {
         fun_res = eat(philo);
@@ -38,9 +39,8 @@ void *routine(void *_philo_)
         {
             UNLOCK(philo->r_fork);
             UNLOCK(philo->l_fork);
-            return NULL; 
+            return NULL;
         }
-        
         UNLOCK(philo->r_fork);
         UNLOCK(philo->l_fork);
         
@@ -68,52 +68,48 @@ int eat(t_philo *philo)
     if (someone_died(philo))
         return -2;
 
-    //locking right fork
     LOCK(philo->r_fork);
+    
     if (someone_died(philo))
         return -1;
+        
     print_status(philo, TOOK_FORK);
-
-    if (philo->app->philos_num == 1)
+    if (philo->app->philos_num == 1 || someone_died(philo))
 	    return -1;
-    
 
-    //locking left fork
     LOCK(philo->l_fork);
+    
     if (someone_died(philo))
 	    return 0;
     print_status(philo, TOOK_FORK);
     
-    //modify the data
+    if (someone_died(philo))
+	    return 0;
+        
     LOCK(&philo->app->dead_lock);
     philo->last_meal = get_time();
     philo->times_ate ++;
     UNLOCK(&philo->app->dead_lock);
+    
+    if (someone_died(philo))
+	    return 0;
+        
     print_status(philo, EATING);
-
     sleep_for(philo->app->time_of_eating);
+    
+    if (someone_died(philo))
+	    return 0;
+        
     return 1;
 }
 
 int	sleep_(t_philo *philo)
 {
 	if (someone_died(philo))
-		return 0;	
+		return 0;
 	print_status(philo, SLEEPING);
 	sleep_for(philo->app->time_of_sleeping);
 	return 1;
-}
-
-int	someone_died(t_philo *philo)
-{
-	LOCK(&philo->app->dead_lock);
-	if (philo->app->deads > 0)
-	{
-		UNLOCK(&philo->app->dead_lock);
-		return 1;
-	}
-	UNLOCK(&philo->app->dead_lock);
-	return 0;
 }
 
 int think(t_philo *philo)
@@ -123,3 +119,19 @@ int think(t_philo *philo)
     print_status(philo, THINKING);
     return 1;
 }
+
+int	someone_died(t_philo *philo)
+{
+	LOCK(&philo->app->dead_lock);
+	LOCK(&philo->app->dead);
+	if (philo->app->deads > 0)
+	{
+	    UNLOCK(&philo->app->dead);
+		UNLOCK(&philo->app->dead_lock);
+		return 1;
+	}
+	UNLOCK(&philo->app->dead);
+	UNLOCK(&philo->app->dead_lock);
+	return 0;
+}
+

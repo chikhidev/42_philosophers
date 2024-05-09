@@ -6,7 +6,7 @@
 /*   By: abchikhi <abchikhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 10:01:14 by abchikhi          #+#    #+#             */
-/*   Updated: 2024/05/06 13:58:59 by abchikhi         ###   ########.fr       */
+/*   Updated: 2024/05/09 08:52:28 by abchikhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ typedef struct s_app
     int             finished;
     pthread_mutex_t print_lock;
     pthread_mutex_t dead_lock;
-    pthread_mutex_t time_lock;
+    pthread_mutex_t dead;
     t_philo         *philos;
     pthread_mutex_t	*forks;
 }   t_app;
@@ -74,6 +74,7 @@ void	print_status(t_philo *philo, char *status);
 void    *routine(void *_philo_);
 int     free_everything(t_app *app);
 void	join_threads(t_app *app);
+int	    someone_died(t_philo *philo);
 
 /*time.h*/
 size_t  get_time();

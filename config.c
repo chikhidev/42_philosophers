@@ -6,7 +6,7 @@
 /*   By: abchikhi <abchikhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 16:31:49 by abchikhi          #+#    #+#             */
-/*   Updated: 2024/05/07 13:45:33 by abchikhi         ###   ########.fr       */
+/*   Updated: 2024/05/09 08:57:05 by abchikhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	init_data(t_app *app)
 	}
 	pthread_mutex_init(&app->print_lock, NULL);
 	pthread_mutex_init(&app->dead_lock, NULL);
-	// pthread_mutex_init(&app->time_lock, NULL);
+	pthread_mutex_init(&app->dead, NULL);
 	i = -1;
 	while (++i < app->philos_num)
 		pthread_create(&app->philos[i].thread, NULL, routine, &app->philos[i]);
@@ -73,8 +73,16 @@ int	init_data(t_app *app)
 
 void	print_status(t_philo *philo, char *status)
 {
+	LOCK(&philo->app->dead);
+	if (philo->app->deads > 0
+		&& ft_strncmp(status, DEAD, 4) != 0)
+	{
+		UNLOCK(&philo->app->dead);
+		return ;
+	}
 	LOCK(&philo->app->print_lock);
 	printf("%ld\t%d %s\n", get_time() - philo->app->start_time,
 		philo->id + 1, status);
 	UNLOCK(&philo->app->print_lock);
+	UNLOCK(&philo->app->dead);
 }

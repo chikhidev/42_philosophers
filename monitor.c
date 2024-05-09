@@ -6,7 +6,7 @@
 /*   By: abchikhi <abchikhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 16:47:30 by abchikhi          #+#    #+#             */
-/*   Updated: 2024/05/07 13:43:57 by abchikhi         ###   ########.fr       */
+/*   Updated: 2024/05/09 08:53:45 by abchikhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,9 @@ int	monitor(t_app *app)
 			if (get_time() - app->philos[i].last_meal > (size_t)app->time_to_die
 				&& !app->philos[i].finished)
 			{
-				app->deads++;
+				LOCK(&app->dead);
+				app->deads += 1;
+				UNLOCK(&app->dead);
 				print_status(&app->philos[i], DEAD);
 				UNLOCK(&app->dead_lock);
 				return 0;
