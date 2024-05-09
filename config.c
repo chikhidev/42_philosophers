@@ -17,18 +17,18 @@ int	free_everything(t_app *app)
 	free(app->philos);
 	free(app->forks);
 	free(app);
-	return 1;
+	return (1);
 }
 
 int	allocate(t_app *app)
 {
 	app->philos = malloc(sizeof(t_philo) * app->philos_num);
 	if (!app->philos)
-		return 0;
+		return (0);
 	app->forks = malloc(sizeof(pthread_mutex_t) * app->philos_num);
 	if (!app->forks)
-		return 0;
-	return 1;
+		return (0);
+	return (1);
 }
 
 void	get_forks(t_app *app, t_philo *philo, int i)
@@ -46,9 +46,9 @@ void	get_forks(t_app *app, t_philo *philo, int i)
 int	init_data(t_app *app)
 {
 	int	i;
-	
+
 	if (!allocate(app))
-		return 0;
+		return (0);
 	i = -1;
 	app->finished = 0;
 	app->start_time = get_time();
@@ -68,21 +68,20 @@ int	init_data(t_app *app)
 	i = -1;
 	while (++i < app->philos_num)
 		pthread_create(&app->philos[i].thread, NULL, routine, &app->philos[i]);
-	return 1;
-}	
+	return (1);
+}
 
 void	print_status(t_philo *philo, char *status)
 {
 	LOCK(&philo->app->dead);
-	if (philo->app->deads > 0
-		&& ft_strncmp(status, DEAD, 4) != 0)
+	if (philo->app->deads > 0 && ft_strncmp(status, DEAD, 4) != 0)
 	{
 		UNLOCK(&philo->app->dead);
 		return ;
 	}
 	LOCK(&philo->app->print_lock);
-	printf("%ld\t%d %s\n", get_time() - philo->app->start_time,
-		philo->id + 1, status);
+	printf("%ld\t%d %s\n", get_time() - philo->app->start_time, philo->id + 1,
+			status);
 	UNLOCK(&philo->app->print_lock);
 	UNLOCK(&philo->app->dead);
 }
