@@ -6,7 +6,7 @@
 /*   By: abchikhi <abchikhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 16:38:05 by abchikhi          #+#    #+#             */
-/*   Updated: 2024/05/09 09:06:57 by abchikhi         ###   ########.fr       */
+/*   Updated: 2024/05/09 10:12:30 by abchikhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,16 +94,16 @@ int	eat(t_philo *philo)
 	sleep_for(philo->app->time_of_eating);
 	if (someone_died(philo))
 		return (0);
-	return 1;
+	return (1);
 }
 
 int	sleep_(t_philo *philo)
 {
 	if (someone_died(philo))
-		return 0;
+		return (0);
 	print_status(philo, SLEEPING);
 	sleep_for(philo->app->time_of_sleeping);
-	return 1;
+	return (1);
 }
 
 int	someone_died(t_philo *philo)
@@ -112,8 +112,8 @@ int	someone_died(t_philo *philo)
 	if (philo->app->deads > 0)
 	{
 		UNLOCK(&philo->app->dead);
-		return 1;
+		return (1);
 	}
 	UNLOCK(&philo->app->dead);
-	return 0;
+	return (0);
 }

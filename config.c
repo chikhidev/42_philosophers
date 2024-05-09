@@ -6,7 +6,7 @@
 /*   By: abchikhi <abchikhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 16:31:49 by abchikhi          #+#    #+#             */
-/*   Updated: 2024/05/09 08:57:05 by abchikhi         ###   ########.fr       */
+/*   Updated: 2024/05/09 10:11:25 by abchikhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	print_status(t_philo *philo, char *status)
 	}
 	LOCK(&philo->app->print_lock);
 	printf("%ld\t%d %s\n", get_time() - philo->app->start_time, philo->id + 1,
-			status);
+		status);
 	UNLOCK(&philo->app->print_lock);
 	UNLOCK(&philo->app->dead);
 }
