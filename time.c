@@ -27,7 +27,5 @@ void	sleep_for(int time)
 	size_t	expected;
 
 	expected = get_time() + time;
-	while (get_time() < expected)
-	{
-	}
+	while (get_time() < expected);
 }
